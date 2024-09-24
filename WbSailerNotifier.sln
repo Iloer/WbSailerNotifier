@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WbSailerNotifier", "WbSailerNotifier.csproj", "{CBC4F6E1-69B1-480A-BDA0-C6FC5D56FBA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WbSailerNotifier.DataAccess", "..\WbSailerNotifier.DataAccess\WbSailerNotifier.DataAccess.csproj", "{0CE81062-B9A8-42A7-A6EC-B6E1FC431296}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBC4F6E1-69B1-480A-BDA0-C6FC5D56FBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC4F6E1-69B1-480A-BDA0-C6FC5D56FBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC4F6E1-69B1-480A-BDA0-C6FC5D56FBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC4F6E1-69B1-480A-BDA0-C6FC5D56FBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CE81062-B9A8-42A7-A6EC-B6E1FC431296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE81062-B9A8-42A7-A6EC-B6E1FC431296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE81062-B9A8-42A7-A6EC-B6E1FC431296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE81062-B9A8-42A7-A6EC-B6E1FC431296}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {422609A7-F2C7-4DC3-8C9F-FB3FFC291FE0}
+	EndGlobalSection
+EndGlobal
