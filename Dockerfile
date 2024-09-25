@@ -1,23 +1,27 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+ARG BASE_DOTNET_SDK_IMAGE="mcr.microsoft.com/dotnet/sdk:8.0"
+ARG BASE_DOTNET_RUNTIME_IMAGE="mcr.microsoft.com/dotnet/aspnet:8.0"
+ARG VERSION="1.0"
 
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
-USER app
+#FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM $BASE_DOTNET_SDK_IMAGE AS build-env
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["WbSailerNotifier.csproj", "."]
-RUN dotnet restore "./././WbSailerNotifier.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./WbSailerNotifier.csproj" -c $BUILD_CONFIGURATION -o /app/build
+ARG nuget_repo="https://api.nuget.org/v3/index.json"
+ARG nuget_user="000"
+ARG nuget_password="000"
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WbSailerNotifier.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN mkdir obj
+COPY . ./
 
-FROM base AS final
+RUN dotnet nuget remove source nuget.org && \
+dotnet nuget add source $nuget_repo -n myTeam -u $nuget_user -p $nuget_password --store-password-in-clear-text && \
+dotnet restore "WbSailerNotifier/WbSailerNotifier.csproj" && \
+dotnet publish "WbSailerNotifier/WbSailerNotifier.csproj" -c Release -o /app/out
+
 WORKDIR /app
-COPY --from=publish /app/publish .
+#FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build
+FROM $BASE_DOTNET_RUNTIME_IMAGE as build
+
+WORKDIR /app
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "WbSailerNotifier.dll"]
