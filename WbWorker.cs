@@ -4,13 +4,13 @@ using WbSailerNotifier.Mappers;
 
 namespace WbSailerNotifier
 {
-    public class Worker : BackgroundService
+    public class WbWorker : BackgroundService
     {
-        private ILogger<Worker> Logger { get; }
+        private ILogger<WbWorker> Logger { get; }
         private IWbOrderService WbOrderService { get; }
         private IOrderRepository OrderRepository { get; }
 
-        public Worker(ILogger<Worker> logger, IWbOrderService wbOrderService, IOrderRepository orderRepository)
+        public WbWorker(ILogger<WbWorker> logger, IWbOrderService wbOrderService, IOrderRepository orderRepository)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             WbOrderService = wbOrderService ?? throw new ArgumentNullException(nameof(wbOrderService));
@@ -21,15 +21,21 @@ namespace WbSailerNotifier
         {
             while (!ct.IsCancellationRequested)
             {
-
-                var orders = await WbOrderService.GetListAsync(ct);
-                foreach ( var order in orders)
+                try
                 {
-                    await OrderRepository.CreateAsync(order.ToEntity(), ct);
+                    var orders = await WbOrderService.GetListAsync(ct);
+                    foreach (var order in orders)
+                    {
+                        await OrderRepository.CreateAsync(order.ToEntity(), ct);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, $"Error in {nameof(WbWorker)}");
                 }
 
-
-                await Task.Delay(1000 * 60 * 30, ct);
+                await Task.Delay(1000 * 60 * 10, ct); // Раз в 10 минут
             }
         }
     }

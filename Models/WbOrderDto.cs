@@ -88,7 +88,7 @@ namespace WbSailerNotifier.Models
         public string GNumber { get; set; }
 
         [JsonPropertyName("srid")]
-        public string Srid { get; set; }        
+        public string Srid { get; set; }
     }
 
 }

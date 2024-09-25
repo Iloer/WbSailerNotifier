@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 using WbSailerNotifier;
 using WbSailerNotifier.Configurations;
@@ -16,7 +15,6 @@ builder.Services.AddOptions();
 
 
 var dataBaseConfig = builder.Configuration.GetSection("DataBaseConfiguration").Get<DataBaseConfiguration>();
-var wbConfiguration = builder.Configuration.GetSection("WbConfiguration").Get<WbConfiguration>();
 
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(dataBaseConfig.FullConnectionString,
@@ -30,12 +28,17 @@ builder.Services.AddTransient<MigrationHelper>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 builder.Services.Configure<WbConfiguration>(builder.Configuration.GetSection("WbConfiguration"));
-builder.Services.AddTransient<IWbOrderService, WbOrderService>();
+builder.Services.Configure<TelegramConfiguration>(builder.Configuration.GetSection("TelegramConfiguration"));
 
+builder.Services.AddTransient<IWbOrderService, WbOrderService>();
 builder.Services.AddHttpClient<IWbOrderService, WbOrderService>();
 
+builder.Services.AddTransient<ITgService, TgService>();
+builder.Services.AddHttpClient<ITgService, TgService>();
 
-builder.Services.AddHostedService<Worker>();
+
+builder.Services.AddHostedService<WbWorker>();
+builder.Services.AddHostedService<TgWorker>();
 
 
 var host = builder.Build();

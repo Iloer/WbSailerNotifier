@@ -1,17 +1,21 @@
 namespace WbSailerNotifier.Configurations
 {
     /// <summary>
-    /// Конфигурация WB
+    /// Конфигурация
     /// </summary>
     public class TelegramConfiguration
     {
         /// <summary>
-        /// Адрес WB
+        /// Адрес
         /// </summary>
         public string? BaseUrl { get; set; } = null;
         /// <summary>
-        /// Token WB
+        /// Token
         /// </summary>
         public string? Token { get; set; } = null;
+        /// <summary>
+        /// ChatId
+        /// </summary>
+        public string? ChatId { get; set; } = null;
     }
 }

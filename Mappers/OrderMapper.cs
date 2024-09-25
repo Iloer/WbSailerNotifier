@@ -1,4 +1,6 @@
-﻿using WbSailerNotifier.DataAccess.Models;
+﻿using System.Text;
+
+using WbSailerNotifier.DataAccess.Models;
 using WbSailerNotifier.Models;
 
 namespace WbSailerNotifier.Mappers
@@ -7,7 +9,7 @@ namespace WbSailerNotifier.Mappers
     {
         public static Order ToEntity(this WbOrderDto dto)
         {
-            return new Order 
+            return new Order
             {
                 Srid = dto.Srid,
                 IsNotified = false,
@@ -18,7 +20,7 @@ namespace WbSailerNotifier.Mappers
                 GNumber = dto.GNumber,
                 OblastOkrugName = dto.OblastOkrugName,
                 OrderType = dto.OrderType,
-                RegionName = dto.RegionName, 
+                RegionName = dto.RegionName,
                 Sticker = dto.Sticker,
                 Subject = dto.Subject,
                 SupplierArticle = dto.SupplierArticle,
@@ -39,5 +41,17 @@ namespace WbSailerNotifier.Mappers
                 TotalPrice = dto.TotalPrice
             };
         }
-    }
+
+        public static string ToTgMessage(this Order dto)
+        {
+            var res = new StringBuilder();
+            res.AppendLine("Новый заказ!")
+                .Append("Заказ: ").AppendLine(dto.GNumber)
+                .Append("Артикул: ").AppendLine(dto.SupplierArticle)
+                .Append("Товар: ").AppendLine(dto.Subject)
+                .Append("Размер: ").AppendLine(dto.TechSize)
+                .Append("Ссылка: ").AppendLine("{Тут будет ссылка}");
+            return res.ToString();
+        }
+    };
 }
