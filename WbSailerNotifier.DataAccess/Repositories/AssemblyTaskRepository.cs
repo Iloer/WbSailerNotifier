@@ -7,16 +7,16 @@ using WbSailerNotifier.DataAccess.Models;
 
 namespace WbSailerNotifier.DataAccess.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class AssemblyTaskRepository : IAssemblyTaskRepository
     {
-        protected ILogger<OrderRepository> Logger { get; set; }
+        protected ILogger<AssemblyTaskRepository> Logger { get; set; }
         protected IDatabaseContextFactory ContextFactory { get; set; }
-        public OrderRepository(ILogger<OrderRepository> logger, IDatabaseContextFactory contextFactory) {
+        public AssemblyTaskRepository(ILogger<AssemblyTaskRepository> logger, IDatabaseContextFactory contextFactory) {
             ContextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<Order> CreateAsync(Order entity, CancellationToken ct = default)
+        public async Task<AssemblyTask> CreateAsync(AssemblyTask entity, CancellationToken ct = default)
         {
             ArgumentNullException.ThrowIfNull(entity, nameof(entity));
 
@@ -24,35 +24,35 @@ namespace WbSailerNotifier.DataAccess.Repositories
 
             await using var context = ContextFactory.CreateDbContext();
 
-            var isExist = await context.Orders.ContainsAsync(entity, ct);
+            var isExist = await context.AssemblyTasks.ContainsAsync(entity, ct);
             if (!isExist)
             {
-                await context.Orders.AddAsync(entity, ct);
+                await context.AssemblyTasks.AddAsync(entity, ct);
                 await context.SaveChangesAsync(ct);
             }
             return entity;
         }
 
-        public async Task<Order> GetAsync(string srid, CancellationToken ct = default)
+        public async Task<AssemblyTask> GetAsync(long id, CancellationToken ct = default)
         {
             await using var context = ContextFactory.CreateDbContext();
-            return await context.Orders.SingleOrDefaultAsync(x => x.Srid == srid, ct) ??
-                throw new KeyNotFoundException($"Order not found");
+            return await context.AssemblyTasks.SingleOrDefaultAsync(x => x.Id == id, ct) ??
+                throw new KeyNotFoundException($"AssemblyTask not found");
         }
 
-        public async Task<List<Order>> GetListAsync(GetOrdersByNotifyFilter filter, CancellationToken ct = default)
+        public async Task<List<AssemblyTask>> GetListAsync(GetOrdersByNotifyFilter filter, CancellationToken ct = default)
         {
             await using var context = ContextFactory.CreateDbContext();
-            return await context.Orders.Where(x => x.IsNotified == filter.IsNotified).ToListAsync(ct);
+            return await context.AssemblyTasks.Where(x => x.IsNotified == filter.IsNotified).ToListAsync(ct);
         }
 
-        public async Task<bool> SetNotifyAsync(string srid, CancellationToken ct = default)
+        public async Task<bool> SetNotifyAsync(long id, CancellationToken ct = default)
         {
             await using var context = ContextFactory.CreateDbContext();
             try
             {
-                await context.Orders
-                    .Where(o => o.Srid == srid)
+                await context.AssemblyTasks
+                    .Where(o => o.Id == id)
                     .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.IsNotified, true), ct);
                 return true;
             }catch

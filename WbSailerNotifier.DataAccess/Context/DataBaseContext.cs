@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 using WbSailerNotifier.DataAccess.Models;
 
@@ -11,6 +10,7 @@ namespace WbSailerNotifier.DataAccess.Context
         public const string DefaultMigrationHistoryTableName = "__MigrationsHistory";
 
         public DbSet<Order> Orders { get; set; }
+        public DbSet<AssemblyTask> AssemblyTasks { get; set; }
         
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {

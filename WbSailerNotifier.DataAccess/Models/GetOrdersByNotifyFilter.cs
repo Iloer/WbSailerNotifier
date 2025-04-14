@@ -1,6 +1,6 @@
 ﻿namespace WbSailerNotifier.DataAccess.Models
 {
-    public class GetOrdersFilter
+    public class GetOrdersByNotifyFilter
     {
         public bool? IsNotified { get; set; }
     }

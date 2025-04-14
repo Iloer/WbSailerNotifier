@@ -26,6 +26,7 @@ builder.Services.AddTransient<IDatabaseContextFactory>(_ => new DatabaseContextF
 builder.Services.AddTransient<MigrationHelper>();
 
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<IAssemblyTaskRepository, AssemblyTaskRepository>();
 
 builder.Services.Configure<WbConfiguration>(builder.Configuration.GetSection("WbConfiguration"));
 builder.Services.Configure<TelegramConfiguration>(builder.Configuration.GetSection("TelegramConfiguration"));
@@ -33,13 +34,16 @@ builder.Services.Configure<TelegramConfiguration>(builder.Configuration.GetSecti
 builder.Services.AddTransient<IWbOrderService, WbOrderService>();
 builder.Services.AddHttpClient<IWbOrderService, WbOrderService>();
 
+builder.Services.AddTransient<IWbOrderNewService, WbOrderNewService>();
+builder.Services.AddHttpClient<IWbOrderNewService, WbOrderNewService>();
+
 builder.Services.AddTransient<ITgService, TgService>();
 builder.Services.AddHttpClient<ITgService, TgService>();
 
 
-builder.Services.AddHostedService<WbWorker>();
+builder.Services.AddHostedService<WbOrdersWorker>();
 builder.Services.AddHostedService<TgWorker>();
-
+builder.Services.AddHostedService<WbOrdersNewWorker>();
 
 var host = builder.Build();
 host.Run();
